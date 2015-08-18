@@ -1,0 +1,20 @@
+{
+  "name": "another-browserify-brunch",
+  "version": "0.0.1",
+  "description": "Brunch plugin for integrating Browserify with brunch",
+  "main": "index.js",
+  "author": "Luke Ulrich",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ulritech/another-browserify-brunch.git"
+  },
+  "dependencies": {
+    "browserify": "^11.x",
+    "exorcist": "^0.x",
+    "mkdirp": "^0.x",
+    "touch": "^1.x",
+    "uglifyify": "^3.x",
+    "watchify": "^3.x"
+  }
+}
