@@ -1,6 +1,6 @@
 {
   "name": "another-browserify-brunch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Brunch plugin for integrating Browserify with brunch",
   "main": "index.js",
   "author": "Luke Ulrich",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "browserify": "^11.x",
+    "chalk": "^1.1.1",
     "exorcist": "^0.x",
     "mkdirp": "^0.x",
     "touch": "^1.x",

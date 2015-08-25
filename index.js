@@ -14,7 +14,8 @@
 var fs = require('fs'),
 	path = require('path');
 
-var mkdirp = require('mkdirp'),
+var chalk = require('chalk'),
+	mkdirp = require('mkdirp'),
 	browserify = require('browserify'),
 	watchify = require('watchify'),
 	exorcist = require('exorcist'),
@@ -84,9 +85,12 @@ AnotherBrowserifyBrunchPlugin.prototype.bundle = function(changedFiles) {
 		multipleFilesChanged = changedFiles && changedFiles.length > 1;
 
 	if (multipleFilesChanged)
-		console.log('\n\tCompilation started');
+		console.log('\nStart', chalk.cyan('bundling'));
 
 	var bundle = this.bundler_.bundle();
+	bundle.on('error', function(error) {
+		console.error(chalk.red(chalk.red(error.toString())));
+	});
 	if (this.brunchConfig_.sourceMaps)
 		bundle = bundle.pipe(exorcist(this.outMapFile_));
 
@@ -103,12 +107,14 @@ AnotherBrowserifyBrunchPlugin.prototype.bundle = function(changedFiles) {
 			if (changedFiles) {
 				if (multipleFilesChanged) {
 					changedFiles.forEach(function(changedFile) {
-						console.log('\tCompiled:', changedFile);
+						var friendlyName = shortFileName(changedFile);
+						console.log('\tCompiled:', chalk.underline(friendlyName));
 					});
-					console.log('\tCompilation complete:', ms + 'ms');
+					console.log('Finished', chalk.cyan('bundle'), 'in', ms + 'ms\n');
 				}
 				else {
-					console.log('\n\tCompiled:', changedFiles[0], 'in', ms + 'ms');
+					var friendlyName = shortFileName(changedFiles[0]);
+					console.log('\nCompiled:', chalk.underline(friendlyName), 'in', ms + 'ms');
 				}
 			}
 		});
@@ -118,5 +124,19 @@ AnotherBrowserifyBrunchPlugin.prototype.teardown = function() {
 	if (this.watching_)
 		this.bundler_.close();
 };
+
+function shortFileName(fileName) {
+	return stripFromBeginning(fileName, process.cwd() + '/');
+}
+
+function stripFromBeginning(subject, query) {
+	if (!query)
+		return subject;
+
+	if (subject.indexOf(query) === 0)
+		return subject.substr(query.length);
+
+	return subject;
+}
 
 module.exports = AnotherBrowserifyBrunchPlugin;
